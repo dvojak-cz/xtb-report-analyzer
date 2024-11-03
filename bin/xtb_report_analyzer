@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/xtb_report_analyzer/cli'
+
+XTBReportAnalyzer::CLI.start(ARGV)

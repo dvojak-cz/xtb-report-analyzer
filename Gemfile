@@ -2,4 +2,5 @@
 
 source "https://rubygems.org"
 
-# gem "rails"
+gem 'thor'
+gem "roo", "~> 2.10.0"
