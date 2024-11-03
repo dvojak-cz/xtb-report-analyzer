@@ -1,42 +1,43 @@
 # lib/xtb_report_analyzer/converters/xlsx_to_json.rb
 require 'json'
 require 'roo'
+require_relative '../common/data'
 
 module XTBReportAnalyzer
   module Convertors
     class XLSXToJSON
       @@TABLE_HEADERS = {
-        :closedPositions => {
+        C_D::CLOSED_POSITIONS => {
           :position => "Position", :symbol => "Symbol", :type => "Type", :volume => "Volume", :open_time => "Open time",
           :open_price => "Open price", :close_time => "Close time", :close_price => "Close price",
           :open_origin => "Open origin", :close_origin => "Close origin", :purchuse_value => "Purchase value",
           :sale_value => "Sale value", :sl => "SL", :tp => "TP", :margin => "Margin", :commission => "Commission",
           :swap => "Swap", :rollover => "Rollover", :gross_pl_comment => "Gross P/L", :comment => "Comment"
         },
-        :openPositions => {
+        C_D::OPEN_POSITIONS => {
           :position => "Position", :symbol => "Symbol", :type => "Type", :volume => "Volume", :open_time => "Open time",
           :open_price => "Open price", :market_price => "Market price", :purchase_value => "Purchase value",
           :sl => "SL", :tp => "TP", :margin => "Margin", :commission => "Commission", :swap => "Swap",
           :rollover => "Rollover", :gross_pl => "Gross P/L", :comment => "Comment"
         },
-        :pendingOrders => {
+        C_D::PENDING_ORDERS => {
           :id => "ID", :symbol => "Symbol", :purchase_value => "Purchase value", :nominal_value => "Nominal Value",
           :price => "Price", :margin => "Margin", :type => "Type", :order => "Order", :side => "side", :sl => "SL",
           :tp => "TP", :open_time => "Open time"
         },
-        :cashOperations => {
+        C_D::CASH_OPERATIONS => {
           :id => "ID", :type => "Type", :time => "Time", :comment => "Comment", :symbol => "Symbol", :amount => "Amount"
         },
-        :balanceOperations => {
+        C_D::BALANCE_OPERATIONS => {
           :id => "ID", :type => "Type", :time => "Time", :comment => "Comment", :amount => "Amount"
         }
       }
       @@SHEET_NAMES = {
-        :closedPositions => "CLOSED POSITION HISTORY",
-        :openPositions => "OPEN POSITION 20102024",
-        :pendingOrders => "PENDING ORDERS HISTORY ",
-        :cashOperations => "CASH OPERATION HISTORY",
-        :balanceOperations => "BALANCE OPERATION HISTORY MT"
+        C_D::CLOSED_POSITIONS => "CLOSED POSITION HISTORY",
+        C_D::OPEN_POSITIONS => "OPEN POSITION 20102024",
+        C_D::PENDING_ORDERS => "PENDING ORDERS HISTORY ",
+        C_D::CASH_OPERATIONS => "CASH OPERATION HISTORY",
+        C_D::BALANCE_OPERATIONS => "BALANCE OPERATION HISTORY MT"
       }
 
       def initialize(file_path)
@@ -55,7 +56,7 @@ module XTBReportAnalyzer
       private
 
       def parse_sheet(sheet)
-        raise ArgumentError, "Unsupported sheet" unless @@SHEET_NAMES.key?(sheet)
+        raise ArgumentError, "Unsupported sheet" unless C_D::valid?(sheet)
         @sheet.sheet(@@SHEET_NAMES[sheet]).parse(**@@TABLE_HEADERS[sheet]).reject { |r| r[:position] == "Total" }
       end
 
