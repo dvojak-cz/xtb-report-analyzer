@@ -1,6 +1,10 @@
 version: '3'
 
 tasks:
+  default:
+    cmds:
+      - task --list
+
   create_db:
     desc: "Create a dummy SQLite3 database"
     aliases:
@@ -27,4 +31,4 @@ tasks:
     aliases:
       - rm
     cmds:
-      - migrate -source file://./db/migrations/ -database sqlite3://./dev/sqlite3.db up
+      - bundle exec rake db:up
